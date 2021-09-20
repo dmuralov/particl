@@ -3870,9 +3870,9 @@ void CChainState::ReceivedBlockTransactions(const CBlock& block, CBlockIndex* pi
 
 static bool CheckBlockHeader(const CBlockHeader& block, BlockValidationState& state, const Consensus::Params& consensusParams, bool fCheckPOW = true)
 {
-    if (fParticlMode
+    /*if (fParticlMode
         && !block.IsParticlVersion())
-        return state.Invalid(BlockValidationResult::BLOCK_CONSENSUS, "block-version", "bad block version");
+        return state.Invalid(BlockValidationResult::BLOCK_CONSENSUS, "block-version", "bad block version");*/
 
     // Check timestamp
     if (fParticlMode
@@ -4269,7 +4269,7 @@ static bool ContextualCheckBlock(CChainState &chain_state, const CBlock& block, 
                 return error("ContextualCheckBlock(): check proof-of-stake failed for block %s\n", block.GetHash().ToString());
             }
         } else {
-            bool fCheckPOW = true; // TODO: pass properly
+            bool fCheckPOW = false; // TODO: pass properly
             if (fCheckPOW && !CheckProofOfWork(block.GetHash(), block.nBits, consensusParams, nHeight, Params().GetLastImportHeight()))
                 return state.Invalid(BlockValidationResult::BLOCK_INVALID_HEADER, "high-hash", "proof of work failed");
 
@@ -4277,9 +4277,8 @@ static bool ContextualCheckBlock(CChainState &chain_state, const CBlock& block, 
             // genesis block scriptSig size will be different
             CScript expect = CScript() << OP_RETURN << nHeight;
             const CScript &scriptSig = block.vtx[0]->vin[0].scriptSig;
-            if (scriptSig.size() < expect.size() ||
-                !std::equal(expect.begin()
-                    , expect.end(), scriptSig.begin() + scriptSig.size()-expect.size())) {
+            if (scriptSig.size() < expect.size() || 
+                !std::equal(expect.begin(), expect.end(), scriptSig.begin() + scriptSig.size()-expect.size())) {
                 return state.Invalid(BlockValidationResult::BLOCK_CONSENSUS, "bad-cb-height", "block height mismatch in coinbase");
             }
         }

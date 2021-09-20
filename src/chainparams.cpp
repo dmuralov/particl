@@ -316,30 +316,50 @@ static CBlock CreateGenesisBlockTestNet(uint32_t nTime, uint32_t nNonce, uint32_
     }
 
     // Foundation Fund Raiser Funds
-    // rVDQRVBKnQEfNmykMSY9DHgqv8s7XZSf5R fc118af69f63d426f61c6a4bf38b56bcdaf8d069
-    OUTPUT_PTR<CTxOutStandard> out = MAKE_OUTPUT<CTxOutStandard>();
+    // por6Cj8pws345x1Q3L31Vs91X3mAm4hTWH rRCW9AKynatZMgZk91NHSNEA34nwc12nmf
+    //       d00565b6d03a70a22425eaa8ab0a9ce952baa851
+    // 76a914d00565b6d03a70a22425eaa8ab0a9ce952baa85188ac
+    //   0x76d00565b6d03a70a22425eaa8ab0a9ce952baa8515ae7c57a
+
+    // por6Cj8pws345x1Q3L31Vs91X3mAm4hTWH
+    // scriptpubkey: 76a914d00565b6d03a70a22425eaa8ab0a9ce952baa85188ac
+    // pubkey: 03a9a4c97522216d70818d9e9b0e4df2a58abc94ef93601fe0f018d3e2bd3e9e71
+    // from_ext_address_id: 'xUQVTqyojdB6sK8XzFt8xwFYLChFR5i4SV'
+
+    
+    OUTPUT_PTR<CTxOutStandard>out = MAKE_OUTPUT<CTxOutStandard>();
     out->nValue = 397364 * COIN;
+    out->scriptPubKey = CScript() << OP_HASH160 << ParseHex("d00565b6d03a70a22425eaa8ab0a9ce952baa851") << OP_EQUAL;
+    txNew.vpout.push_back(out);
+
+    // rVDQRVBKnQEfNmykMSY9DHgqv8s7XZSf5R
+    //       fc118af69f63d426f61c6a4bf38b56bcdaf8d069
+    //   a914fc118af69f63d426f61c6a4bf38b56bcdaf8d06987
+    //   0x7afc118af69f63d426f61c6a4bf38b56bcdaf8d069d7730080
+    out = MAKE_OUTPUT<CTxOutStandard>();
+    out->nValue = 296138 * COIN;
     out->scriptPubKey = CScript() << OP_HASH160 << ParseHex("fc118af69f63d426f61c6a4bf38b56bcdaf8d069") << OP_EQUAL;
     txNew.vpout.push_back(out);
 
-    // rVDQRVBKnQEfNmykMSY9DHgqv8s7XZSf5R fc118af69f63d426f61c6a4bf38b56bcdaf8d069
-    out = MAKE_OUTPUT<CTxOutStandard>();
-    out->nValue = 296138 * COIN;
-    out->scriptPubKey = CScript() << OP_HASH160 << ParseHex("89ca93e03119d53fd9ad1e65ce22b6f8791f8a49") << OP_EQUAL;
-    txNew.vpout.push_back(out);
-
     // Community Initative
-    // rAybJ7dx4t6heHy99WqGcXkoT4Bh3V9qZ8 340288104577fcc3a6a84b98f7eac1a54e5287ee
+    // rAybJ7dx4t6heHy99WqGcXkoT4Bh3V9qZ8
+    //                     340288104577fcc3a6a84b98f7eac1a54e5287ee
+    //   scriptpubkey: a914340288104577fcc3a6a84b98f7eac1a54e5287ee87
+    //   pubkey:       0x7a340288104577fcc3a6a84b98f7eac1a54e5287ee8f674247
     out = MAKE_OUTPUT<CTxOutStandard>();
     out->nValue = 156675 * COIN;
-    out->scriptPubKey = CScript() << OP_HASH160 << ParseHex("89ca93e03119d53fd9ad1e65ce22b6f8791f8a49") << OP_EQUAL;
+    out->scriptPubKey = CScript() << OP_HASH160 << ParseHex("340288104577fcc3a6a84b98f7eac1a54e5287ee") << OP_EQUAL;
     txNew.vpout.push_back(out);
 
     // Contributors Left Over Funds
-    // rAvmLShYFZ78aAHhFfUFsrHMoBuPPyckm5 3379aa2a4379ae6c51c7777d72e8e0ffff71881b
+    // rAvmLShYFZ78aAHhFfUFsrHMoBuPPyckm5
+    //                     3379aa2a4379ae6c51c7777d72e8e0ffff71881b
+    //   scriptpubkey: a9143379aa2a4379ae6c51c7777d72e8e0ffff71881b87
+    //   pubkey : 
+
     out = MAKE_OUTPUT<CTxOutStandard>();
     out->nValue = 216346 * COIN;
-    out->scriptPubKey = CScript() << OP_HASH160 << ParseHex("89ca93e03119d53fd9ad1e65ce22b6f8791f8a49") << OP_EQUAL;
+    out->scriptPubKey = CScript() << OP_HASH160 << ParseHex("3379aa2a4379ae6c51c7777d72e8e0ffff71881b") << OP_EQUAL;
     txNew.vpout.push_back(out);
 
     // Reserved Particl for primary round
@@ -675,7 +695,7 @@ public:
         consensus.nRuleChangeActivationThreshold = 1512; // 75% for testchains
         consensus.nMinerConfirmationWindow = 2016; // nPowTargetTimespan / nPowTargetSpacing
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 28;
-        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = Consensus::BIP9Deployment::NEVER_ACTIVE;
+        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = Consensus::BIP9Deployment::ALWAYS_ACTIVE;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].min_activation_height = 0; // No activation delay
 
@@ -687,7 +707,7 @@ public:
 
         // The best chain should have at least this much work.
         consensus.nMinimumChainWork = uint256S("0x000000000000000000000000000000000000000000000012c75dd4368d68ff58");
-        consensus.defaultAssumeValid = uint256S("0xa7670a4ec4a80183a41c37c0bb377deb25e64d0d9f0e1b9cd69f832c315f2f31"); // 940090
+        consensus.defaultAssumeValid = uint256S("0x0000be470345165c090a8a673cbc782c0ad531fad4b303c7fced99b8629f375c"); // 0
 
         consensus.nMinRCTOutputDepth = 12;
 
@@ -711,49 +731,49 @@ public:
         m_assumed_blockchain_size = 1;
         m_assumed_chain_state_size = 1;
 
-        genesis = CreateGenesisBlockTestNet(1502309248, 5924, 0x1f00ffff);
+        genesis = CreateGenesisBlockTestNet(1631872800, 46002, 0x1f00ffff); // [changhe] timestamp 1502309248   2021-09-17 13:00:00
         consensus.hashGenesisBlock = genesis.GetHash();
         // calculate Genesis Block
         // Reset genesis
-        consensus.hashGenesisBlock = uint256S("0x");
-        std::cout << std::string("Begin calculating Mainnet Genesis Block:\n");
-        if (true && (genesis.GetHash() != consensus.hashGenesisBlock)) {
-            std::cout << std::string("Calculating Mainnet Genesis Block:\n");
-            arith_uint256 hashTarget = arith_uint256().SetCompact(genesis.nBits);
-            uint256 hash;
-            genesis.nNonce = 0;
-            // This will figure out a valid hash and Nonce if you're
-            // creating a different genesis block:
-            // uint256 hashTarget = CBigNum().SetCompact(genesis.nBits).getuint256();
-            // hashTarget.SetCompact(genesis.nBits, &fNegative, &fOverflow).getuint256();
-            // while (genesis.GetHash() > hashTarget)
-            while (UintToArith256(genesis.GetHash()) > hashTarget)
-            {
-                ++genesis.nNonce;
-                if (genesis.nNonce == 0)
-                {
-                    std::cout << std::string("NONCE WRAPPED, incrementing time");
-                    std::cout << std::string("NONCE WRAPPED, incrementing time:\n");
-                    ++genesis.nTime;
-                }
-                if (genesis.nNonce % 10000 == 0)
-                {
-                    std::cout << std::string("Mainnet: nonce ");
-                    std::cout << genesis.nNonce;
-                    std::cout << std::string(", hash = ");
-                    std::cout << genesis.GetHash().ToString().c_str();
-                    std::cout << std::string("\n");
-                    // std::cout << strNetworkID << " nonce: " << genesis.nNonce << " time: " << genesis.nTime << " hash: " << genesis.GetHash().ToString().c_str() << "\n";
-                }
-            }
-            std::cout << "Mainnet ---\n";
-            std::cout << "  nonce: " << genesis.nNonce <<  "\n";
-            std::cout << "   time: " << genesis.nTime << "\n";
-            std::cout << "   hash: " << genesis.GetHash().ToString().c_str() << "\n";
-            std::cout << "   merklehash: "  << genesis.hashMerkleRoot.ToString().c_str() << "\n";
-            // Mainnet --- nonce: 296277 time: 1390095618 hash: 000000bdd771b14e5a031806292305e563956ce2584278de414d9965f6ab54b0
-        }
-        std::cout << std::string("Finished calculating Mainnet Genesis Block:\n");
+        // consensus.hashGenesisBlock = uint256S("0x");
+        // std::cout << std::string("Begin calculating Mainnet Genesis Block:\n");
+        // if (true && (genesis.GetHash() != consensus.hashGenesisBlock)) {
+        //     std::cout << std::string("Calculating Mainnet Genesis Block:\n");
+        //     arith_uint256 hashTarget = arith_uint256().SetCompact(genesis.nBits);
+        //     uint256 hash;
+        //     genesis.nNonce = 0;
+        //     // This will figure out a valid hash and Nonce if you're
+        //     // creating a different genesis block:
+        //     // uint256 hashTarget = CBigNum().SetCompact(genesis.nBits).getuint256();
+        //     // hashTarget.SetCompact(genesis.nBits, &fNegative, &fOverflow).getuint256();
+        //     // while (genesis.GetHash() > hashTarget)
+        //     while (UintToArith256(genesis.GetHash()) > hashTarget)
+        //     {
+        //         ++genesis.nNonce;
+        //         if (genesis.nNonce == 0)
+        //         {
+        //             std::cout << std::string("NONCE WRAPPED, incrementing time");
+        //             std::cout << std::string("NONCE WRAPPED, incrementing time:\n");
+        //             ++genesis.nTime;
+        //         }
+        //         if (genesis.nNonce % 10000 == 0)
+        //         {
+        //             std::cout << std::string("Mainnet: nonce ");
+        //             std::cout << genesis.nNonce;
+        //             std::cout << std::string(", hash = ");
+        //             std::cout << genesis.GetHash().ToString().c_str();
+        //             std::cout << std::string("\n");
+        //             // std::cout << strNetworkID << " nonce: " << genesis.nNonce << " time: " << genesis.nTime << " hash: " << genesis.GetHash().ToString().c_str() << "\n";
+        //         }
+        //     }
+        //     std::cout << "Mainnet ---\n";
+        //     std::cout << "  nonce: " << genesis.nNonce <<  "\n";
+        //     std::cout << "   time: " << genesis.nTime << "\n";
+        //     std::cout << "   hash: " << genesis.GetHash().ToString().c_str() << "\n";
+        //     std::cout << "   merklehash: "  << genesis.hashMerkleRoot.ToString().c_str() << "\n";
+        //     // Mainnet --- nonce: 296277 time: 1390095618 hash: 000000bdd771b14e5a031806292305e563956ce2584278de414d9965f6ab54b0
+        // }
+        // std::cout << std::string("Finished calculating Mainnet Genesis Block:\n");
 
         
 
@@ -803,20 +823,19 @@ public:
 
         checkpointData = {
             {
-                {0, uint256S("0xe5ab909fc029b253bad300ccf859eb509e03897e7853e8bfdde2710dbf248dd1")},
-            }
-        };
+                {0, uint256S("0x0000be470345165c090a8a673cbc782c0ad531fad4b303c7fced99b8629f375c")},
+            }};
 
         m_assumeutxo_data = MapAssumeutxo{
             // TODO to be specified in a future patch.
         };
 
-        chainTxData = ChainTxData{
-            // Data from rpc: getchaintxstats 4096 a7670a4ec4a80183a41c37c0bb377deb25e64d0d9f0e1b9cd69f832c315f2f31
-            /* nTime    */ 1628236944,
-            /* nTxCount */ 1000837,
-            /* dTxRate  */ 0.007
-        };
+        // chainTxData = ChainTxData{
+        //     // Data from rpc: getchaintxstats 4096 a7670a4ec4a80183a41c37c0bb377deb25e64d0d9f0e1b9cd69f832c315f2f31
+        //     /* nTime    */ 1628236944,
+        //     /* nTxCount */ 1000837,
+        //     /* dTxRate  */ 0.007
+        // };
     }
 };
 

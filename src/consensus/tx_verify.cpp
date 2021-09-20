@@ -666,9 +666,9 @@ bool CheckTransaction(const CTransaction& tx, TxValidationState &state)
         return state.Invalid(TxValidationResult::TX_CONSENSUS, "bad-txns-oversize");
 
     if (tx.IsParticlVersion()) {
-        if (state.m_clamp_tx_version && tx.GetParticlVersion() != PARTICL_TXN_VERSION) {
-            return state.Invalid(TxValidationResult::TX_CONSENSUS, "bad-txn-version");
-        }
+        // if (state.m_clamp_tx_version && tx.GetParticlVersion() != PARTICL_TXN_VERSION) {
+        //     return state.Invalid(TxValidationResult::TX_CONSENSUS, "bad-txn-version");
+        // }
         if (tx.vpout.empty()) {
             return state.Invalid(TxValidationResult::TX_CONSENSUS, "bad-txns-vpout-empty");
         }
@@ -721,9 +721,9 @@ bool CheckTransaction(const CTransaction& tx, TxValidationState &state)
             return state.Invalid(TxValidationResult::TX_CONSENSUS, "too-many-data-outputs");
         }
     } else {
-        if (state.m_particl_mode) {
-            return state.Invalid(TxValidationResult::TX_CONSENSUS, "bad-txn-version");
-        }
+        // if (state.m_particl_mode) {
+        //     return state.Invalid(TxValidationResult::TX_CONSENSUS, "bad-txn-version");
+        // }
         if (tx.vout.empty()) {
             return state.Invalid(TxValidationResult::TX_CONSENSUS, "bad-txns-vout-empty");
         }

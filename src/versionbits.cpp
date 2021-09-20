@@ -169,7 +169,7 @@ namespace
  */
 class VersionBitsConditionChecker : public AbstractThresholdConditionChecker {
 private:
-    const Consensus::DeploymentPos id;
+    const Consensus::DeploymentPos id; 
 
 protected:
     int64_t BeginTime(const Consensus::Params& params) const override { return params.vDeployments[id].nStartTime; }

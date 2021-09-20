@@ -18,7 +18,7 @@
 #include <script/interpreter.h>
 #include <util/system.h>
 
-bool fAddressIndex = false;
+bool fAddressIndex = false; 
 bool fTimestampIndex = false;
 bool fSpentIndex = false;
 bool fBalancesIndex = false;
