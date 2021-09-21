@@ -666,9 +666,12 @@ bool CheckTransaction(const CTransaction& tx, TxValidationState &state)
         return state.Invalid(TxValidationResult::TX_CONSENSUS, "bad-txns-oversize");
 
     if (tx.IsParticlVersion()) {
-        // if (state.m_clamp_tx_version && tx.GetParticlVersion() != PARTICL_TXN_VERSION) {
-        //     return state.Invalid(TxValidationResult::TX_CONSENSUS, "bad-txn-version");
-        // }
+        std::cout << "1\n";
+        std::cout << tx.GetParticlVersion() << "\n";
+        if (state.m_clamp_tx_version && tx.GetParticlVersion() != PARTICL_TXN_VERSION) {
+            std::cout << "bad-txn-version with patrticl version\n";
+            return state.Invalid(TxValidationResult::TX_CONSENSUS, "bad-txn-version");
+        }
         if (tx.vpout.empty()) {
             return state.Invalid(TxValidationResult::TX_CONSENSUS, "bad-txns-vpout-empty");
         }
@@ -721,9 +724,12 @@ bool CheckTransaction(const CTransaction& tx, TxValidationState &state)
             return state.Invalid(TxValidationResult::TX_CONSENSUS, "too-many-data-outputs");
         }
     } else {
-        // if (state.m_particl_mode) {
-        //     return state.Invalid(TxValidationResult::TX_CONSENSUS, "bad-txn-version");
-        // }
+        std::cout << "2\n";
+        if (state.m_particl_mode) {
+            //std::cout << tx.GetParticlVersion() << "\n";
+            std::cout << "bad-txn-version without patrticl version\n";
+            return state.Invalid(TxValidationResult::TX_CONSENSUS, "bad-txn-version");
+        }
         if (tx.vout.empty()) {
             return state.Invalid(TxValidationResult::TX_CONSENSUS, "bad-txns-vout-empty");
         }

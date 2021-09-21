@@ -93,6 +93,7 @@ bool CheckProofOfWork(uint256 hash, unsigned int nBits, const Consensus::Params&
 bool CheckProofOfWork(uint256 hash, unsigned int nBits, const Consensus::Params& params,
     int nBlockHeight, int nLastImportHeight)
 {
+    std::cout << "start checkProofofWork\n";
     arith_uint256 bnProofOfWorkLimit;
     if (nBlockHeight < nLastImportHeight)
     {
@@ -108,16 +109,37 @@ bool CheckProofOfWork(uint256 hash, unsigned int nBits, const Consensus::Params&
     bool fNegative;
     bool fOverflow;
     arith_uint256 bnTarget;
+    std::cout << "create bnTarget\n";
 
     bnTarget.SetCompact(nBits, &fNegative, &fOverflow);
+    //std::cout << ArithToUint256(bnTarget) << "\n";
+    std::cout << "pass SetCompact\n";
+
+    if (fNegative)
+        std::cout << "false fNegative\n";
+
+    if (bnTarget == 0)
+        std::cout << "bnTarget zero\n";
+
+    if (fOverflow)
+        std::cout << "false fOverflow\n";
+
+    if (bnTarget > bnProofOfWorkLimit)
+        std::cout << "greater\n";
 
     // Check range
-    if (fNegative || bnTarget == 0 || fOverflow || bnTarget > bnProofOfWorkLimit)
+    if (fNegative || bnTarget == 0 || fOverflow || bnTarget > bnProofOfWorkLimit) {
+        std::cout << "false range\n";
         return false;
+    }
 
     // Check proof of work matches claimed amount
-    if (UintToArith256(hash) > bnTarget)
+    if (UintToArith256(hash) > bnTarget){
+        std::cout << "false hash\n";
         return false;
+    }
+
+    std::cout << "all good\n";
 
     return true;
 }

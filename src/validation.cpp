@@ -3870,9 +3870,9 @@ void CChainState::ReceivedBlockTransactions(const CBlock& block, CBlockIndex* pi
 
 static bool CheckBlockHeader(const CBlockHeader& block, BlockValidationState& state, const Consensus::Params& consensusParams, bool fCheckPOW = true)
 {
-    /*if (fParticlMode
+    if (fParticlMode
         && !block.IsParticlVersion())
-        return state.Invalid(BlockValidationResult::BLOCK_CONSENSUS, "block-version", "bad block version");*/
+        return state.Invalid(BlockValidationResult::BLOCK_CONSENSUS, "block-version", "bad block version");
 
     // Check timestamp
     if (fParticlMode
@@ -3979,6 +3979,8 @@ bool CheckBlock(const CBlock& block, BlockValidationState& state, const Consensu
         if (block.vtx[i]->IsCoinBase())
             return state.Invalid(BlockValidationResult::BLOCK_CONSENSUS, "bad-cb-multiple", "more than one coinbase");
     }
+
+    std::cout << "all good before transactions\n";
 
     // Check transactions
     // Must check for duplicate inputs (see CVE-2018-17144)
@@ -4126,8 +4128,11 @@ static bool ContextualCheckBlockHeader(const CBlockHeader& block, BlockValidatio
 
     if (fParticlMode && pindexPrev) {
         // Check proof-of-stake
-        if (block.nBits != GetNextTargetRequired(pindexPrev))
+        if (block.nBits != GetNextTargetRequired(pindexPrev)){
+            std::cout << block.nBits << "\n";
+            std::cout << GetNextTargetRequired(pindexPrev) << "\n";
             return state.Invalid(BlockValidationResult::BLOCK_INVALID_HEADER, "bad-diffbits-pos", "incorrect proof of stake");
+        }
     } else {
         // Check proof of work
         if (block.nBits != GetNextWorkRequired(pindexPrev, &block, consensusParams))
